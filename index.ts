@@ -1,10 +1,13 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import { analyseGameLibrary, fetchGetGameLibrary } from './src/services/steam/steam-service';
 
 dotenv.config();
 
 const app = express();
+app.use(cors())
+
 const port = process.env.PORT;
 
 app.get('/', (_, res) => {
@@ -14,8 +17,13 @@ app.get('/', (_, res) => {
 app.get('/steam/:steamId', async (req, res) => {
 	const { params } = req
 
-	const steamResult = await fetchGetGameLibrary(params.steamId)
-	res.send(analyseGameLibrary(steamResult))
+	try {
+		const steamResult = await fetchGetGameLibrary(params.steamId)
+		res.send(analyseGameLibrary(steamResult))
+	} catch (e) {
+		console.error(e)
+		res.sendStatus(500)
+	}
 })
 
 app.listen(port, () => {
