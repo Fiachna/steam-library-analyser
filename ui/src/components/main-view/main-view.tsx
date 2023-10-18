@@ -21,7 +21,6 @@ export const MainView: FC = () => {
 						direction="vertical"
 						size={16}
 					>
-						{`url = ${import.meta.env.VITE_API_URL}`}
 						<SteamIdCard />
 						<SteamLibraryDetails />
 					</Space>
