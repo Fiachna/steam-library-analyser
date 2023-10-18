@@ -1,4 +1,4 @@
-import { Dispatch, FC, ReactNode, SetStateAction, createContext, useEffect, useMemo, useState } from "react"
+import { Dispatch, FC, ReactNode, SetStateAction, createContext, useEffect, useState } from "react"
 import { SteamLibrary } from "../../../types/steam-library"
 
 interface Props {
@@ -18,18 +18,18 @@ export const SteamIdSetterContext = createContext<Dispatch<SetStateAction<string
 const useSteamLibrary = (steamId: string) => {
 	const [steamLibrary, setSteamLibrary] = useState<SteamLibrary>(emptyLibrary)
 
-	const fetchGetSteamLibrary = useMemo(async () => {
+	const fetchGetSteamLibrary = async () => {
 		if (steamId) {
-			const libraryResponse = await fetch(`http://localhost:3000/steam/${steamId}`)
+			const libraryResponse = await fetch(`${import.meta.env.VITE_API_URL}${steamId}`)
 			return await libraryResponse.json()
 		}
 
 		return await emptyLibrary
-	}, [steamId])
+	}
 
 	useEffect(() => {
 		const doRequestSteamLibrary = async () => {
-			setSteamLibrary(await fetchGetSteamLibrary)
+			setSteamLibrary(await fetchGetSteamLibrary())
 		}
 
 		doRequestSteamLibrary()
